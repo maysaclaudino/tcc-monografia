@@ -80,7 +80,7 @@
 %\nocite{bronevetsky02,schmidt03:MSc, FSF:GNU-GPL, CORBA:spec, MenaChalco08}
 % Com este comando, todos os itens do arquivo .bib são incluídos na lista
 % de referências
-%\nocite{*}
+\nocite{*}
 
 % É possível definir como determinadas palavras podem (ou não) ser
 % hifenizadas; no entanto, a hifenização automática geralmente funciona bem
@@ -94,7 +94,7 @@
 \title{Título do trabalho}[um subtítulo]
 \translatedtitle{Title of the document}[a subtitle]
 
-\author[fem]{Nome Completo}
+\author[fem]{Maysa Cristina Claudino da Silva}
 
 \def\profa{Prof\kern.02em.\kern-.07emª\kern.07em}
 \def\dra{Dr\kern-.04em.\kern-.11emª\kern.07em}
@@ -120,9 +120,9 @@
 % definitiva (ou seja, a versão final após a incorporação das sugestões
 % da banca).
 \tipotese{
-  mestrado,
+  % mestrado,
   %doutorado,
-  %tcc,
+  tcc,
   %definitiva, % É a versão para defesa ou a versão definitiva?
   %quali, % É qualificação?
   programa={Ciência da Computação},
@@ -155,8 +155,8 @@
 %
 %\apoio{During the development if this work, the author received\\
 %      financial support from FAPESP -- grant \#aaaa/nnnnn-d}
-\apoio{Durante o desenvolvimento deste trabalho o autor
-       recebeu auxílio financeiro da XXXX}
+% \apoio{Durante o desenvolvimento deste trabalho o autor
+%        recebeu auxílio financeiro da XXXX}
 
 % A licença do seu trabalho. Use CC-BY, CC-BY-NC, CC-BY-ND, CC-BY-SA,
 % CC-BY-NC-SA ou CC-BY-NC-ND para escolher a licença Creative Commons
@@ -184,7 +184,17 @@
 % Basta copiar e colar o resultado aqui.
 \fichacatalografica{}
 
+% \newcommand{\cmd}[1]{\textsf{#1}}
+% \usepackage{tabularray}
+% \usepackage{hyperref}
+% \usepackage{xcolor}
+% \UseTblrLibrary{booktabs} % para linhas horizontais mais elegantes
+% \usepackage{fvextra}
+% \usepackage[most]{tcolorbox}
 
+
+\usepackage{tikz}
+\usetikzlibrary{shapes.multipart, arrows.meta, positioning, matrix}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%% AQUI COMEÇA O CONTEÚDO DE FATO %%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -207,10 +217,10 @@
 
 %%%%%%%%%%%%%%%% DEDICATÓRIA, AGRADECIMENTOS, RESUMO/ABSTRACT %%%%%%%%%%%%%%%%%%
 
-\begin{dedicatoria}
-Esta seção é opcional e fica numa página separada; ela pode ser usada para
-uma dedicatória ou epígrafe.
-\end{dedicatoria}
+% \begin{dedicatoria}
+% Esta seção é opcional e fica numa página separada; ela pode ser usada para
+% uma dedicatória ou epígrafe.
+% \end{dedicatoria}
 
 % Reinicia o contador de páginas (a próxima página recebe o número "i") para
 % que a página da dedicatória não seja contada.
@@ -221,15 +231,15 @@ uma dedicatória ou epígrafe.
 % esta página. A epígrafe, obviamente, é opcional; é possível colocar
 % epígrafes em todos os capítulos. O comando "\chapter*" faz esta seção
 % não ser incluída no sumário.
-\chapter*{Agradecimentos}
-\epigrafe{Do. Or do not. There is no try.}{Mestre Yoda}
+% \chapter*{Agradecimentos}
+% \epigrafe{Do. Or do not. There is no try.}{Mestre Yoda}
 
-Texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto texto texto texto texto texto texto texto texto texto
-texto texto texto texto. Texto opcional.
+% Texto texto texto texto texto texto texto texto texto texto texto texto texto
+% texto texto texto texto texto texto texto texto texto texto texto texto texto
+% texto texto texto texto texto texto texto texto texto texto texto texto texto
+% texto texto texto texto. Texto opcional.
 
-\input{conteudo/resumoabstract}
+% \input{conteudo/resumoabstract}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% LISTAS DE FIGURAS ETC. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -260,47 +270,52 @@ texto texto texto texto. Texto opcional.
 
 %%%%% Listas criadas manualmente
 
-%\chapter*{Lista de abreviaturas}
+\chapter*{Lista de abreviaturas}
 \disablenewpage{\chapter*{Lista de abreviaturas}}
 
 \begin{tabular}{rl}
-   CFT & Transformada contínua de Fourier (\emph{Continuous Fourier Transform})\\
-   DFT & Transformada discreta de Fourier (\emph{Discrete Fourier Transform})\\
-  EIIP & Potencial de interação elétron-íon (\emph{Electron-Ion Interaction Potentials})\\
-  STFT & Transformada de Fourier de tempo reduzido (\emph{Short-Time Fourier Transform})\\
-  ABNT & Associação Brasileira de Normas Técnicas\\
-   URL & Localizador Uniforme de Recursos (\emph{Uniform Resource Locator})\\
-   IME & Instituto de Matemática e Estatística\\
-   USP & Universidade de São Paulo
+  %  CFT & Transformada contínua de Fourier (\emph{Continuous Fourier Transform})\\
+  %  DFT & Transformada discreta de Fourier (\emph{Discrete Fourier Transform})\\
+  % EIIP & Potencial de interação elétron-íon (\emph{Electron-Ion Interaction Potentials})\\
+  % STFT & Transformada de Fourier de tempo reduzido (\emph{Short-Time Fourier Transform})\\
+  % ABNT & Associação Brasileira de Normas Técnicas\\
+  %  URL & Localizador Uniforme de Recursos (\emph{Uniform Resource Locator})\\
+  %  IME & Instituto de Matemática e Estatística\\
+  %  USP & Universidade de São Paulo\\
+   CET & Centro de Engenharia de Tráfego\\
+   INMET & Instituto Nacional de Meteorologia\\ 
+   Pesquisa OD & Pesquisa Origem-Destino\\
+   RMSP & Região Metropolitana de São Paulo\\
+   CGE & Companhia de Engenharia de Tráfego\\
 \end{tabular}
 
 %\chapter*{Lista de símbolos}
-\disablenewpage{\chapter*{Lista de símbolos}}
+% \disablenewpage{\chapter*{Lista de símbolos}}
 
-\begin{tabular}{rl}
-  $\omega$ & Frequência angular\\
-    $\psi$ & Função de análise \emph{wavelet}\\
-    $\Psi$ & Transformada de Fourier de $\psi$\\
-\end{tabular}
+% \begin{tabular}{rl}
+%   $\omega$ & Frequência angular\\
+%     $\psi$ & Função de análise \emph{wavelet}\\
+%     $\Psi$ & Transformada de Fourier de $\psi$\\
+% \end{tabular}
 
 % Quebra de página manual
-\clearpage
+% \clearpage
 
 %%%%% Listas criadas automaticamente
 
 % Você pode escolher se quer ou não permitir a quebra de página
 %\listoffigures
-\disablenewpage{\listoffigures}
+% \disablenewpage{\listoffigures}
 
 % Você pode escolher se quer ou não permitir a quebra de página
 %\listoftables
-\disablenewpage{\listoftables}
+% \disablenewpage{\listoftables}
 
 % Esta lista é criada "automaticamente" pela package float quando
 % definimos o novo tipo de float "program" (em utils.tex)
 % Você pode escolher se quer ou não permitir a quebra de página
 %\listof{program}{\programlistname}
-\disablenewpage{\listof{program}{\programlistname}}
+% \disablenewpage{\listof{program}{\programlistname}}
 
 % Sumário (obrigatório)
 \tableofcontents
@@ -341,13 +356,13 @@ texto texto texto texto. Texto opcional.
 
 % A introdução não tem número de capítulo, então os cabeçalhos também não
 \pagestyle{unnumberedchapter}
-\input{conteudo/00-exemplo-introducao}
+\input{conteudo/00-introducao}
 \pagestyle{mainmatter}
-\input{conteudo/01-exemplo-normas-ime}
-\input{conteudo/02-exemplo-usando-o-modelo}
-\input{conteudo/03-exemplo-latex}
-\input{conteudo/04-exemplo-tutorial}
-\input{conteudo/05-exemplo-exemplos}
+\input{conteudo/01-cenario}
+\input{conteudo/02-analise-dados}
+\input{conteudo/03-interscsimulator}
+\input{conteudo/04-resultados}
+\input{conteudo/05-conclusao}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%% APÊNDICES E ANEXOS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -375,35 +390,35 @@ texto texto texto texto. Texto opcional.
 
 %%%% Apêndices %%%%
 
-\cleardoublepage
+% \cleardoublepage
 
-\pagestyle{appendix}
+% \pagestyle{appendix}
 
-\appendix
+% \appendix
 
 % \addappheadtotoc acrescenta a palavra "Apêndice" ao sumário; se
 % só há apêndices, sem anexos, provavelmente não é necessário.
-\addappheadtotoc
+% \addappheadtotoc
 
-\input{conteudo/apendice-exemplo-faq}
-\par
+% \input{conteudo/apendice-exemplo-faq}
+% \par
 
 %%%% Anexos %%%%
 
-\cleardoublepage
+% \cleardoublepage
 
-\pagestyle{appendix} % repete o anterior, caso você não use apêndices
+% \pagestyle{appendix} % repete o anterior, caso você não use apêndices
 
-\annex
+% \annex
 
 % \addappheadtotoc acrescenta a palavra "Anexo" ao sumário; se
 % só há anexos, sem apêndices, provavelmente não é necessário.
-\addappheadtotoc
+% \addappheadtotoc
 
-\input{conteudo/anexo-exemplo-imegoodies}
-\par
-\input{conteudo/anexo-exemplo-pseudocodigo}
-\par
+% \input{conteudo/anexo-exemplo-imegoodies}
+% \par
+% \input{conteudo/anexo-exemplo-pseudocodigo}
+% \par
 
 
 %%%%%%%%%%%%%%% SEÇÕES FINAIS (BIBLIOGRAFIA E ÍNDICE REMISSIVO) %%%%%%%%%%%%%%%%

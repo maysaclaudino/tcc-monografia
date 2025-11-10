@@ -1,0 +1,260 @@
+%!TeX root=../tese.tex
+%("dica" para o editor de texto: este arquivo é parte de um documento maior)
+% para saber mais: https://tex.stackexchange.com/q/78101
+
+\chapter{Análise e tratamento dos dados}
+\label{chap:analise-tratamento-dados} 
+
+São Paulo, a maior metrópole da América Latina, apresenta diariamente um fluxo intenso e complexo de deslocamentos urbanos. Este capítulo tem como objetivo definir o escopo espacial e temporal adotado para a simulação da mobilidade urbana na cidade, buscando reduzir a complexidade inicial do estudo. O foco está na observação das ocorrências de alagamento e na sua relação com os índices pluviométricos correspondentes. Além de delimitar a região de interesse, o tratamento dos dados foi essencial para identificar quais informações são relevantes ao simulador e como elas devem ser estruturadas. As seções seguintes descrevem a origem dos dados, as análises realizadas e o processo de organização das informações para a etapa de simulação.
+
+\enlargethispage{.8\baselineskip}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 
+\section{Origem dos dados}
+\label{sec:origem-dos-dados}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Para simular a mobilidade urbana em cenários de alagamento precisamos analisar algumas informações cruciais: as ocorrências de alagamentos dos últimos anos, o histórico de pluviometria, as viagens realizadas pelos cidadãos e a rede viária da cidade. A Tabela \ref{tab:fontes_dados} resume as fontes de dados utilizadas nesse trabalho e suas páginas de acesso.
+
+A plataforma GeoSampa disponibiliza para download o histórico das ocorrências de alagamentos registradas pela Defesa Civil desde 2013. A Companhia de Engenharia de Tráfego (CET) também forneceu o seu histórico de pontos de alagamentos a partir do ano de 2006 até novembro de 2024. O conjunto dessas fontes foram usadas para obter o momento e a localização de alagamentos passados.
+
+Para obter informações dos eventos climáticos que provocaram os alagamentos, foram coletados os registros pluviométricos da estação automática A701 São Paulo - Mirante do Instituto Nacional de Meteorologia (INMET), localizada na subprefeitura Santana-Tucuruvi, zona norte da capital. O Banco de Dados do INMET fornece os dados coletados a cada hora pela estação desde o ano de 2000. Para informações mais específicas de cada região, foram utilizados os dados do Boletim Pluviométrico do Centro de Gerenciamento de Emergências Climáticas (CGE) que fornece a pluviometria diária de cada subprefeitura desde 2010.
+
+Apesar dos registros fornecidos pela CET começarem em 2006, as coordenadas geográficas dos eventos começaram a ser registradas apenas em 2018. Nos anos anteriores foi salvo apenas o nome da via e uma referência por escrito do local afetado. Assim, considerando esse fator e a intersecção dos períodos das fontes, os dados analisados e utilizados na simulação contemplam o intervalo de janeiro de 2018 à novembro de 2024.
+
+A Pesquisa Origem Destino, também chamada de Pesquisa OD, realizada pela Companhia do Metropolitano de São Paulo reflete os padrões de deslocamento das pessoas na Região Metropolitana de São Paulo. As mais de 21 milhões de viagens diárias que população passou a realizar após o impacto da pandemia da Covid-19, foram refletidas na Pesquisa OD de 2023. Devido a sua atualidade, essa versão da pesquisa foi utilizada para representar a mobilidade urbana nesse trabalho.
+
+A rede viária da cidade de São Paulo foi obtida através do OpenStreetMap, um projeto de distribuição informações geográficas do mundo todo. Os dados são mantidos pela própria comunidade e abertos para qualquer pessoa.
+
+Com as fontes de dados consolidadas e o período definido, passou-se à etapa de análise exploratória, buscando identificar padrões espaciais e temporais relevantes para o experimento de simulação.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|>{\raggedright\arraybackslash}p{4cm} | p{6cm} | p{4cm} |}
+\hline
+
+\textbf{Fonte dos Dados} & \textbf{Descrição} & \textbf{Página web} \\ \hline
+GeoSampa & Ocorrências de alagamentos registradas pela Defesa Civil desde 2013. & \href{https://metadados.geosampa.prefeitura.sp.gov.br/geonetwork/intranet/por/catalog.search#/metadata/432c06b1-03a1-4b1f-9210-423e1b58e869}{Portal GeoSampa} \\ \hline
+Companhia de Engenharia de Tráfego (CET) & Pontos de alagamentos registrados entre 2006 e novembro de 2024. & Não estão publicados na web. \\ \hline
+Instituto Nacional de Meteorologia (INMET) & Registros pluviométricos horários da estação automática A701 (São Paulo - Mirante) desde o ano de 2000. & \href{https://bdmep.inmet.gov.br/}{Banco de Dados Meteorológicos do INMET} \\ \hline
+Centro de Gerenciamento de Emergências Climáticas (CGE) & Pluviometria diária para cada subprefeitura de São Paulo desde 2010. & \href{https://arquivos.saisp.br/nextcloud/index.php/s/qikdinFyAM33MJK?path=%2FBOLETIM_PLUVIOMETRICO}{Boletim Pluviométrico CGESP} \\ \hline
+Pesquisa Origem-Destino (Pesquisa OD) 2023 & Viagens diárias na Região Metropolitana de São Paulo. & \href{https://www.metro.sp.gov.br/pt_BR/pesquisa-od/}{Portal da Pesquisa OD (Metrô)} \\ \hline
+OpenStreetMap & Mapa da rede viária (ruas, avenidas, etc.) da cidade de São Paulo. & \href{https://www.openstreetmap.org/}{Portal OpenStreetMap} \\ \hline
+\end{tabular}
+
+\caption{Fontes de dados utilizadas no trabalho.}
+\label{tab:fontes_dados}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Análise inicial}
+\label{sec:analise-inicial}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Nessa primeira etapa, foram analisados os dados obtidos das fontes mencionadas anteriormente a fim de compreender o comportamento de alagamentos na cidade e identificar regiões com sobreposição significativa entre ocorrências de alagamentos e viagens. A partir desse estudo é possível definir a área de foco do trabalho e construir heurísticas acerca dos parâmetros temporais necessários para simular os cenários de chuva e alagamentos.
+
+O mapa da Figura \ref{fig:mapa-ocorrencias-por-km2} mostra a densidade dos registros de ocorrências de alagamentos por km² nas subprefeituras de São Paulo. A ferramenta Leaflet foi usada para montar os mapas ilustrados nessa seção. A versão interativa dos mapas, incluindo os mapas específicos de cada ano, pode ser acessada na página web desse trabalho\footnote{Disponível em: \url{https://maysaclaudino.github.io/tcc/mapas-analise-inicial/}}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{imagens/mapas/ocorrencias-por-km2.png}
+    \caption{Registros de alagamentos por km² nas subprefeituras de São Paulo.}
+    \label{fig:mapa-ocorrencias-por-km2}
+\end{figure}
+
+A Tabela \ref{tab:ocorrencias-e-densidade} contém os valores numéricos das cinco subprefeituras com mais ocorrências de alagamento no período analisado.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Subprefeitura} & \textbf{Total de eventos} & \textbf{Eventos por km²} \\ \hline
+Sé            & 312   & 11,70       \\ \hline 
+São Miguel    & 432   & 16,52       \\ \hline
+Santana-Tucuruvi & 225   & 6,29        \\ \hline
+Lapa          & 225   & 5,54       \\ \hline
+Santo Amaro    & 192   & 5,09       \\ \hline
+\end{tabular}
+\caption{As cinco subprefeituras com mais ocorrências de alagamento.}
+\label{tab:ocorrencias-e-densidade}
+\end{table}
+
+Fica evidente que as regiões da Sé e São Miguel possuem um total de alagamentos mapeados mais expressivo em comparação com as demais regiões da capital. No entanto, as duas apresentam características distintas.
+
+\begin{figure}[htbp]
+    \centering
+    % --- Primeira imagem ---
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{imagens/mapas/ocorrencias-sao-miguel.png}
+        \caption{Ocorrências de alagamentos em São Miguel -- jan/2018 a nov/2024.}
+        \label{fig:ocorrencias-sao-miguel}
+    \end{subfigure}
+    \hfill
+    % --- Segunda imagem ---
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{imagens/mapas/ocorrencias-se.png}
+        \caption{Ocorrências de alagamentos na Sé -- jan/2018 a nov/2024.}
+        \label{fig:ocorrencias-se}
+    \end{subfigure}
+    \caption{Comparação das ocorrências de alagamentos entre as subprefeituras São Miguel e Sé.}
+    \label{fig:comparacao-sao-miguel-se}
+\end{figure}
+
+São Miguel, no extremo leste da capital, apresenta o maior número de alagamentos, mas eles estão concentrados em poucos pontos e possuem distribuição espacial limitada. Segundo a Pesquisa OD de 2023, a região registra cerca de \hl{375 mil} viagens produzidas e atraídas diariamente. Já a Sé contabiliza aproximadamente \hl{444 mil} viagens, refletindo o papel central que exerce na rede de mobilidade da cidade. Além das viagens com origem ou destino na própria subprefeitura, muitas outras atravessam a região, conectando diferentes zonas da capital. 
+
+No banco de dados da Pesquisa OD, a região da Sé está classificada como parte da Zona Central da cidade. Essa zona inclui também áreas das subprefeituras de Pinheiros, Mooca, Lapa e Vila Mariana. Por esse motivo, a análise e a simulação consideram as ocorrências de alagamentos e as viagens de toda essa região ampliada, ilustrada na Figura \hl{[incluir referência ao mapa]}. Essa ampliação é vantajosa, pois incorpora não apenas as viagens que começam ou terminam na Sé, mas também aquelas que passam pela subprefeitura, oferecendo uma visão mais completa do impacto dos alagamentos sobre a mobilidade central da cidade.
+
+A Zona Central de São Paulo concentra uma grande diversidade de vias e modais de transporte (avenidas estruturais, ruas locais, ciclovias, linhas de metrô e corredores de ônibus) e também abriga parte significativa da atividade econômica da capital, com forte presença de comércios, serviços e equipamentos públicos. Essa combinação faz da Sé uma região estratégica para a análise da relação entre alagamentos e mobilidade urbana. 
+
+Apesar dessa diversidade modal, o presente trabalho considera apenas as viagens realizadas por automóvel. Essa escolha tem como objetivo simplificar a modelagem inicial no simulador e concentrar a análise nos efeitos diretos dos alagamentos sobre o tráfego viário, sem a interferência de outros modos de transporte. Além disso, o número expressivo de alagamentos registrados na região central nos últimos anos reforça a relevância da Sé como foco principal dos cenários de simulação.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Construção dos arquivos de entrada}
+\label{sec:arquivos-de-entrada} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Nessa seção, descrevemos como os dados introduzidos anteriormente foram manipulados e organizados de forma que o InterSCsimulator pudesse ler e trabalhar as informações. Com esse objetivo, a solução desenhada é composta de um arquivo \texttt{rain.csv} que detalha a quantidade de precipitação ao decorrer do período da simulação e um outro arquivo \texttt{roads-rain-capacity.csv} que detalha a capacidade pluviométrica comportada pelas vias do mapa. Esse segundo, é feito a partir do cruzamento dos registros de alagamentos com os registros de pluviometria. As Listagens \ref{lst:exemplo-rain-csv} e \ref{lst:exemplo-roads-rain-capacity} exemplificam o formato desses arquivos, que serão explicados adiante.
+
+\begin{lstlisting} [
+  basicstyle=\small\ttfamily,
+  caption={Exemplo de um arquivo \texttt{rain.csv}.},
+  label={lst:exemplo-rain-csv},
+  numbers=none,        % remove os números de linha
+  frame=single,        % adiciona uma borda simples
+  rulecolor=\color{black}, % cor da borda
+]
+1;1.8
+3600;1.2
+7200;1.0
+10800;24.8
+14400;25.4
+18000;11.6
+\end{lstlisting}
+
+\begin{lstlisting} [
+  basicstyle=\small\ttfamily,
+  caption={Exemplo de um arquivo \texttt{roads-rain-capacity.csv}.},
+  label={lst:exemplo-roads-rain-capacity},
+  numbers=none,        % remove os números de linha
+  frame=single,        % adiciona uma borda simples
+  rulecolor=\color{black}, % cor da borda
+]
+CV EVARISTO COMOLATTI;3595;2390993860;2225397467;27.4
+R ROCHA;7643;4350117963;4350117967;33.0
+MARGINAL TIETE CENTRAL;9510;25876617;25876402;33.8
+\end{lstlisting}
+
+Como mencionado anteriormente, o CGE fornece a milimetragem diária de chuva de cada subprefeitura. Essa granularidade em específico comprometeria tanto a precisão e veracidade dos valores de capacidade das vias, quanto impossibilitaria de realizar uma simulação mais realista. Isso porque uma chuva constante ao longo de várias horas ou um temporal momentâneo podem gerar a mesma quantidade de chuva ao fim do dia. Também, dependendo do momento do dia, a chuva pode ter impactos diferentes na mobilidade urbana, a \citetitle{pesquisa-od-metro} mostra que às 17h o número de viagens iniciadas da RMSP mais que triplica em relação às 10h.
+
+Os dados do INMET possuem granularidade horária, o que soluciona as questões apresentadas acima. Contudo, a estação meteorológica do INMET está localizada em Santana-Tucuruvi, a aproximadamente 7 km da da subprefeitura da Sé. Devido a distância, nessa etapa, verificamos a viabilidade de usar os registros do INMET no decorrer do desenvolvimento do trabalho.
+
+O mapa da Figura \ref{fig:correlacao-pearson-cge-inmet}, ilustra o coeficiente de correlação de Pearson \footnote{O coeficiente de correlação de Pearson mede a intensidade e a direção da relações linear entre variáveis.} calculado entre os dados de pluviometria do CGE de cada subprefeitura e a soma diária dos dados da estação do INMET. Os dados usados abrangem o período de janeiro de 2018 a novembro de 2024, em dias em que pelo menos uma das estações registrou pluviometria. O coeficiente de Pearson varia de 0 a 1, conforme a Tabela \ref{tab:coeficiente-de-pearson} obtida de \cite{correlation2018schober}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{imagens/mapas/correlacao-pearson-cge-inmet.png}
+    \caption{Correlação de pluviometria entre o CGE e o INMET}
+    \label{fig:correlacao-pearson-cge-inmet}
+\end{figure}
+
+\begin{table}[htbp]
+    \begin{tabular}{|c|c|}
+    \hline
+    \textbf{Coeficiente de Pearson} & \textbf{Interpretação}    \\ \hline
+    0,00 – 0,09                     & Correlação insignificante \\ \hline
+    0,10 – 0,39                     & Correlação fraca          \\ \hline
+    0,40 – 0,69                     & Correlação moderada       \\ \hline
+    0,70 – 0,89                     & Correlação forte          \\ \hline
+    0,90 – 1,00                     & Correlação muito forte    \\ \hline
+    \end{tabular}
+    \caption{Interpretação dos coeficientes de correlação de Pearson}
+    \label{tab:coeficiente-de-pearson}
+\end{table}
+
+É possível observar que as subprefeituras mais próximas à estação do INMET apresentam maiores coeficientes de correlação. Conforme esperado, Santana-Tucuruvi tem o maior valor 0,82, uma correlação forte. Dessa forma, a comparação e o uso das duas fontes de dados faz sentido principalmente nas regiões próximas à estação do INMET. Em particular, temos interesse na subprefeitura da Sé cujo coeficiente é 0,74, também considerado uma correlação forte.
+
+Como a pluviometria horária evidencia com mais precisão os eventos de chuvas e alagamentos do que a pluviometria diária e os históricos do INMET e CGE possuem uma forte correlação para a Sé, justifica-se usar os dados do INMET como referência nas etapas posteriores.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Chuvas e capacidade das vias}
+\label{sec:chuvas-capacidade-vias}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Primeiramente, precisamos fornecer ao InterSCSimulator o volume de chuva a ser simulado ao longo do tempo. Isso é feito passando um arquivo de entrada no formato csv com essa descrição, chamado aqui de \texttt{rainfall.csv}. Cada tick do simulador representa 1 segundo na vida real. Então, a primeira coluna desse arquivo corresponde a quantos segundos se passaram desde o início da simulação, a segunda coluna descreve a pluviometria em milímetros do intervalo de tempo entre a sua entrada e a anterior.
+
+A Listagem \ref{lst:exemplo-rain-csv} descreve a pluviometria horária em 5 horas de simulação. O arquivo \texttt{rainfall.csv} foi gerado a partir de um script em Python implementado especificamente para processar os dados brutos do INMET e convertê-los para o formato aceito pelo simulador.\footnote{Disponível em: \hl{[INSERIR LINK]}}
+
+Além desse arquivo, o simulador também requer um arquivo \texttt{trips.xml}, responsável por descrever as viagens que ocorrem durante a simulação. Esse arquivo já era parte do conjunto de entradas padrão do InterSCSimulator. Para gerar um novo \texttt{trips.xml} com as viagens da região de análise, foi desenvolvido o script \texttt{pesquisaOD-to-trips-xml.ipynb}\footnote{Disponível em: \hl{[INSERIR LINK]}}, que utiliza como entrada o banco de dados da Pesquisa OD e o grafo da cidade (\texttt{map.xml}, do OpenStreetMap). O script filtra as viagens que possuem origem ou destino dentro da região estudada, identifica os nós correspondentes no grafo e constrói o arquivo \texttt{trips.xml} no formato esperado pelo simulador. Cada viagem registrada nesse arquivo contém o nó de origem, o nó de destino, o identificador da aresta de origem, a quantidade de viagens representadas por aquela entrada e o horário de início da viagem.
+
+% trocar esse primeiro e segundo lugar
+Agora, precisamos informar a simulação em relação a capacidade pluviométrica das vias para acionar o efeito de alagamento nela no momento adequado (explicado na Seção \ref{sec:gerenciador-eventos}). Procura-se obter a partir das fontes de dados um limite de pluviometria para cada via que quando ultrapassado, a via em questão é alagada.
+
+A meteorologista do INMET Marlene Real disse, em entrevista ao Portal Multiplix (\cite{meteorologistaINMET}), que a intensidade da chuva está relacionada ao seu tempo de duração, podendo ser classificada como o seguinte:
+
+\begin{itemize}
+    \item Até 0,1mm/m: chuvisco
+    \item De 0,2mm/h a 9,9mm/h: chuva fraca
+    \item De 10mm/h a 19mm/h: chuva moderada
+    \item De 20mm/h a 60mm/h: chuva forte
+\end{itemize}
+
+A partir dessa especificação, desconsideraremos para a análise subsequente as ocorrências com menos de 5mm de chuva acumulados nas últimas 10 horas anteriores ao evento.
+
+Para definir o limite de pluviometria das vias da região da Sé, analisamos os índices pluviométricos nos horários próximos aos que foram apurados nas ocorrências de alagamentos. Aqui consideramos apenas os registros da CET a partir de 2023, pois são os únicos que dispõem de horário de início e término da interdição. O mapa de calor na Figura \ref{fig:heatmap-precipitacao-eventos} exibe o índice pluviométrico nas 6 horas anteriores e posteriores ao início da interdição por alagamentos.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{imagens/heatmap-precipitacao-eventos.png}
+    \caption{Mapa de calor do índice pluviométrico nas 5 horas anteriores e posteriores ao início da interdição por alagamento na região da Sé}
+    \label{fig:heatmap-precipitacao-eventos}
+\end{figure}
+
+A Tabela \ref{tab:porcentagem-chuva-relevante} traz a relação de momento em que a chuva forte começou em relação ao início do evento de alagamento. A partir dela, é razoável escolher para cada evento o volume de chuva acumulado no intervalo da 2\textsuperscript{a} hora anterior até o horário do evento como o índice de causa do alagamento, já que 67\% das ocorrências com chuva relevante se incluem nesse período.
+
+\begin{table}[htbp]
+    \begin{tabular}{|c|c|}
+    \hline
+    \textbf{Início da chuva forte} & \textbf{Quantidade de eventos} \\ \hline
+    Na hora do evento & 3   \\ \hline
+    1\textsuperscript{a} hora anterior & 22   \\ \hline
+    2\textsuperscript{a} hora anterior & 2   \\ \hline
+    3\textsuperscript{a} hora anterior & 0   \\ \hline
+    4\textsuperscript{a} hora anterior & 2   \\ \hline
+    5\textsuperscript{a} hora anterior & 2   \\ \hline
+    \end{tabular}
+    \caption{Porcentagem de eventos com chuva relevante por intervalo de tempo}
+    \label{tab:porcentagem-chuva-relevante}
+\end{table}
+
+Ao todo, \hl{xx\%} dos locais de alagamento da Sé estão inclusos nesse recorte. Para as vias em que houveram alagamentos mas não foram contempladas devido a não terem o registro horário, usaremos como limite de pluviometria o maior valor da soma deslizante de 3 horas no dia da ocorrência. Portanto, a capacidade pluviométrica de uma rua será o menor limite obtido dentre as ocorrências de alagamento observadas. 
+
+Finalmente, montamos o arquivo \texttt{roads-rainfall-capacity.csv} (Listagem \ref{lst:exemplo-roads-rain-capacity}), onde:
+
+\begin{itemize}
+    \item A primeira coluna é o nome da rua. Esse parâmetro não é utilizado na simulação, mas torna o arquivo mais amigável para seres humanos.
+    \item A segunda coluna é o id da aresta equivalente a via no grafo do mapa.
+    \item A terceira e quarta coluna são os id's dos nós equivalentes ao início e fim da via no grafo do mapa, respectivamente.
+    \item A quinta coluna é a capacidade pluviométrica da via.
+\end{itemize}
+
+Toda aresta não inclusa nesse arquivo é tratada como se não alagasse, independentemente da quantidade de chuva. No repositório deste trabalho disponibilizamos o arquivo \texttt{roads-rainfall-capacity-se.csv} para as estradas da região da Sé.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\textwidth]{imagens/diagramas/processamento-de-dados.png}
+    \caption{Fluxo de processamento dos dados para o InterSCSimulator.\label{fig:diag-fluxo-processamento-dados}}
+\end{figure}
+
+Com todas as informações preparadas — incluindo o volume de chuva processado por meio do arquivo \texttt{rainfall.csv} e a definição da capacidade pluviométrica das vias no arquivo \texttt{roads-rainfall-capacity.csv} — concluímos a etapa de análise e estruturação dos dados necessários para a simulação. A partir daqui, avançamos para a próxima fase do trabalho, na qual implementamos as adaptações do InterSCSimulator que permitem representar os efeitos dos alagamentos na mobilidade urbana da cidade.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
