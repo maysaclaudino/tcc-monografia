@@ -61,7 +61,7 @@ O mapa da Figura \ref{fig:mapa-ocorrencias-por-km2} mostra a densidade dos regis
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{imagens/mapas/ocorrencias-por-km2.png}
+    \includegraphics[width=0.6\textwidth]{imagens/mapas/ocorrencias-por-km2.png}
     \caption{Registros de alagamentos por km² nas subprefeituras de São Paulo.}
     \label{fig:mapa-ocorrencias-por-km2}
 \end{figure}
@@ -91,7 +91,7 @@ Fica evidente que as regiões da Sé e São Miguel possuem um total de alagament
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{imagens/mapas/ocorrencias-sao-miguel.png}
-        \caption{Ocorrências de alagamentos em São Miguel -- jan/2018 a nov/2024.}
+        \caption{Ocorrências de alagamentos em São Miguel \textendash{} jan/2018 a nov/2024.}
         \label{fig:ocorrencias-sao-miguel}
     \end{subfigure}
     \hfill
@@ -99,20 +99,32 @@ Fica evidente que as regiões da Sé e São Miguel possuem um total de alagament
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{imagens/mapas/ocorrencias-se.png}
-        \caption{Ocorrências de alagamentos na Sé -- jan/2018 a nov/2024.}
+        \caption{Ocorrências de alagamentos na Sé \textendash{} jan/2018 a nov/2024.}
         \label{fig:ocorrencias-se}
     \end{subfigure}
     \caption{Comparação das ocorrências de alagamentos entre as subprefeituras São Miguel e Sé.}
     \label{fig:comparacao-sao-miguel-se}
 \end{figure}
 
-São Miguel, no extremo leste da capital, apresenta o maior número de alagamentos, mas eles estão concentrados em poucos pontos e possuem distribuição espacial limitada. Segundo a Pesquisa OD de 2023, a região registra cerca de \hl{375 mil} viagens produzidas e atraídas diariamente. Já a Sé contabiliza aproximadamente \hl{444 mil} viagens, refletindo o papel central que exerce na rede de mobilidade da cidade. Além das viagens com origem ou destino na própria subprefeitura, muitas outras atravessam a região, conectando diferentes zonas da capital. 
+São Miguel, no extremo leste da capital, apresenta o maior número de alagamentos, mas eles estão concentrados em poucos pontos e possuem distribuição espacial limitada. Segundo a Pesquisa OD de 2023, a região registra cerca de 1,2 milhão viagens produzidas e atraídas diariamente. Já a Sé contabiliza quase 3,3 milhões de viagens, refletindo o papel central que exerce na rede de mobilidade da cidade. Além das viagens com origem ou destino na própria subprefeitura, muitas outras atravessam a região, conectando diferentes zonas da capital. 
 
-No banco de dados da Pesquisa OD, a região da Sé está classificada como parte da Zona Central da cidade. Essa zona inclui também áreas das subprefeituras de Pinheiros, Mooca, Lapa e Vila Mariana. Por esse motivo, a análise e a simulação consideram as ocorrências de alagamentos e as viagens de toda essa região ampliada, ilustrada na Figura \ref{fig:regiao-de-analise}. Essa ampliação é vantajosa, pois incorpora não apenas as viagens que começam ou terminam na Sé, mas também aquelas que passam pela subprefeitura, oferecendo uma visão mais completa do impacto dos alagamentos sobre a mobilidade central da cidade.
+No banco de dados da Pesquisa OD, a região da Sé está classificada como parte da Zona Central da cidade. Essa zona inclui também áreas das subprefeituras de Pinheiros, Mooca, Lapa e Vila Mariana. Por esse motivo, a análise e a simulação consideram as ocorrências de alagamentos e as viagens de toda essa região ampliada, ilustrada na Figura \ref{fig:regiao-de-analise}. Essa ampliação é vantajosa, pois incorpora não apenas as viagens que começam ou terminam na Sé, mas também aquelas que passam pela subprefeitura, oferecendo uma visão mais completa do impacto dos alagamentos sobre a mobilidade central da cidade. A Pesquisa OD 2023 indica que essa área produz e atrai mais de 12,4 milhões de viagens, reforçando seu papel central na mobilidade paulistana.
+
+\begin{table}[htbp]
+    \begin{tabular}{|l|l|}
+    \hline
+    \multicolumn{1}{|c|}{\textbf{Região}} & \multicolumn{1}{c|}{\textbf{Total de viagens}} \\ \hline
+    São Miguel                            & 1.221.454                                      \\ \hline
+    Sé                                    & 3.291.606                                      \\ \hline
+    Centro ampliado                      & 12.429.227                                     \\ \hline
+    \end{tabular}
+    \caption{Total de viagens diárias produzidas e atraídas nas regiões analisadas.}
+    \label{tab:total-viagens-regioes}
+\end{table}
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{imagens/mapas/regiao-analise.png}
+    \includegraphics[width=0.6\textwidth]{imagens/mapas/regiao-analise.png}
     \caption{Região de análise: Zona Central de São Paulo ampliada.}
     \label{fig:regiao-de-analise}
 \end{figure}
@@ -167,7 +179,7 @@ O mapa da Figura \ref{fig:correlacao-pearson-cge-inmet}, ilustra o coeficiente d
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{imagens/mapas/correlacao-pearson-cge-inmet.png}
+    \includegraphics[width=0.6\textwidth]{imagens/mapas/correlacao-pearson-cge-inmet.png}
     \caption{Correlação de pluviometria entre o CGE e o INMET}
     \label{fig:correlacao-pearson-cge-inmet}
 \end{figure}
@@ -221,7 +233,7 @@ Para definir o limite de pluviometria das vias da região da Sé, analisamos os 
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{imagens/heatmap-precipitacao-eventos.png}
+    \includegraphics[width=0.6\textwidth]{imagens/heatmap-precipitacao-eventos.png}
     \caption{Mapa de calor do índice pluviométrico nas 5 horas anteriores e posteriores ao início da interdição por alagamento na região da Sé}
     \label{fig:heatmap-precipitacao-eventos}
 \end{figure}
