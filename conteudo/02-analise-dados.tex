@@ -83,7 +83,7 @@ Santo Amaro    & 192   & 5,09       \\ \hline
 \label{tab:ocorrencias-e-densidade}
 \end{table}
 
-Fica evidente que as regiões da Sé e São Miguel possuem um total de alagamentos mapeados mais expressivo em comparação com as demais regiões da capital. No entanto, as duas apresentam características distintas.
+Observamos que as regiões da Sé e de São Miguel apresentam um número de alagamentos mapeados significativamente maior que o das demais regiões da capital. No entanto, as duas apresentam características distintas.
 
 \begin{figure}[htbp]
     \centering
@@ -106,9 +106,9 @@ Fica evidente que as regiões da Sé e São Miguel possuem um total de alagament
     \label{fig:comparacao-sao-miguel-se}
 \end{figure}
 
-São Miguel, no extremo leste da capital, apresenta o maior número de alagamentos, mas eles estão concentrados em poucos pontos e possuem distribuição espacial limitada. Segundo a Pesquisa OD de 2023, a região registra cerca de 1,2 milhão viagens produzidas e atraídas diariamente. Já a Sé contabiliza quase 3,3 milhões de viagens, refletindo o papel central que exerce na rede de mobilidade da cidade. Além das viagens com origem ou destino na própria subprefeitura, muitas outras atravessam a região, conectando diferentes zonas da capital. 
+São Miguel, no extremo leste da capital, apresenta o maior número de alagamentos, embora esses eventos se concentrem em poucos pontos, sem grande dispersão pela região. Segundo a Pesquisa OD de 2023, a região registra cerca de 1,2 milhão viagens produzidas e atraídas diariamente. Já a Sé contabiliza quase 3,3 milhões de viagens, refletindo o papel central que exerce na rede de mobilidade da cidade. Além das viagens com origem ou destino na própria subprefeitura, muitas outras atravessam a região, conectando diferentes zonas da capital. 
 
-No banco de dados da Pesquisa OD, a região da Sé está classificada como parte da Zona Central da cidade. Essa zona inclui também áreas das subprefeituras de Pinheiros, Mooca, Lapa e Vila Mariana. Por esse motivo, a análise e a simulação consideram as ocorrências de alagamentos e as viagens de toda essa região ampliada, ilustrada na Figura \ref{fig:regiao-de-analise}. Essa ampliação é vantajosa, pois incorpora não apenas as viagens que começam ou terminam na Sé, mas também aquelas que passam pela subprefeitura, oferecendo uma visão mais completa do impacto dos alagamentos sobre a mobilidade central da cidade. A Pesquisa OD 2023 indica que essa área produz e atrai mais de 12,4 milhões de viagens, reforçando seu papel central na mobilidade paulistana.
+No banco de dados da Pesquisa OD, a região da Sé está classificada como parte da Zona Central da cidade. Essa zona inclui também áreas das subprefeituras de Pinheiros, Mooca, Lapa e Vila Mariana. Por esse motivo, a análise e a simulação consideram as ocorrências de alagamentos e as viagens de toda essa região ampliada, ilustrada na Figura \ref{fig:regiao-de-analise}. Essa ampliação é vantajosa, pois inclui não apenas as viagens que começam ou terminam na Sé, mas também aquelas que atravessam a subprefeitura, oferecendo uma visão mais completa do impacto dos alagamentos sobre a mobilidade central da cidade. A Pesquisa OD 2023 indica que essa área produz e atrai mais de 12,4 milhões de viagens, reforçando seu papel central na mobilidade paulistana.
 
 \begin{table}[htbp]
     \begin{tabular}{|l|l|}
@@ -125,13 +125,11 @@ No banco de dados da Pesquisa OD, a região da Sé está classificada como parte
 \begin{figure}
     \centering
     \includegraphics[width=0.6\textwidth]{imagens/mapas/regiao-analise.png}
-    \caption{Região de análise: Zona Central de São Paulo ampliada.}
+    \caption{Região de simulação: Zona Central de São Paulo ampliada.}
     \label{fig:regiao-de-analise}
 \end{figure}
 
-A Zona Central de São Paulo concentra uma grande diversidade de vias e modais de transporte (avenidas estruturais, ruas locais, ciclovias, linhas de metrô e corredores de ônibus) e também abriga parte significativa da atividade econômica da capital, com forte presença de comércios, serviços e equipamentos públicos. Essa combinação faz da Sé uma região estratégica para a análise da relação entre alagamentos e mobilidade urbana. 
-
-Apesar dessa diversidade modal, o presente trabalho considera apenas as viagens realizadas por automóvel. Essa escolha tem como objetivo simplificar a modelagem inicial no simulador e concentrar a análise nos efeitos diretos dos alagamentos sobre o tráfego viário, sem a interferência de outros modos de transporte. Além disso, o número expressivo de alagamentos registrados na região central nos últimos anos reforça a relevância da Sé como foco principal dos cenários de simulação.
+A Zona Central de São Paulo concentra uma grande diversidade de vias e modais de transporte (avenidas, ruas, ciclovias, linhas de metrô e corredores de ônibus) e também abriga parte significativa da atividade econômica da capital, com forte presença de comércios, serviços e equipamentos públicos. Essa combinação faz da Sé uma região estratégica para a análise da relação entre alagamentos e mobilidade urbana. Apesar dessa diversidade de meios de transporte que existem na região, o presente trabalho considera apenas as viagens realizadas por automóvel. Essa escolha tem como objetivo simplificar a modelagem inicial no simulador e concentrar a análise nos efeitos diretos dos alagamentos sobre o tráfego viário.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -171,7 +169,7 @@ R ROCHA;7643;4350117963;4350117967;33.0
 MARGINAL TIETE CENTRAL;9510;25876617;25876402;33.8
 \end{lstlisting}
 
-Como mencionado anteriormente, o CGE fornece a milimetragem diária de chuva de cada subprefeitura. Essa granularidade em específico comprometeria tanto a precisão e veracidade dos valores de capacidade das vias, quanto impossibilitaria de realizar uma simulação mais realista. Isso porque uma chuva constante ao longo de várias horas ou um temporal momentâneo podem gerar a mesma quantidade de chuva ao fim do dia. Também, dependendo do momento do dia, a chuva pode ter impactos diferentes na mobilidade urbana, a \citetitle{pesquisa-od-metro} mostra que às 17h o número de viagens iniciadas da RMSP mais que triplica em relação às 10h.
+Como mencionado anteriormente, o CGE fornece a milimetragem diária de chuva de cada subprefeitura. Essa granularidade em específico comprometeria tanto a precisão e veracidade dos valores de capacidade das vias, quanto impossibilitaria de realizar uma simulação mais realista. Isso porque uma chuva constante ao longo de várias horas ou um temporal momentâneo podem gerar a mesma quantidade de chuva ao fim do dia. Também, dependendo do momento do dia, a chuva pode ter impactos diferentes na mobilidade urbana, o relatório da Pesquisa OD mostra que às 17h o número de viagens iniciadas da RMSP mais que triplica em relação às 10h.
 
 Os dados do INMET possuem granularidade horária, o que soluciona as questões apresentadas acima. Contudo, a estação meteorológica do INMET está localizada em Santana-Tucuruvi, a aproximadamente 7 km da da subprefeitura da Sé. Devido a distância, nessa etapa, verificamos a viabilidade de usar os registros do INMET no decorrer do desenvolvimento do trabalho.
 
@@ -209,7 +207,7 @@ Como a pluviometria horária evidencia com mais precisão os eventos de chuvas e
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Primeiramente, precisamos fornecer ao InterSCSimulator o volume de chuva a ser simulado ao longo do tempo. Isso é feito passando um arquivo de entrada no formato csv com essa descrição, chamado aqui de \texttt{rainfall.csv}. Cada tick do simulador representa 1 segundo na vida real. Então, a primeira coluna desse arquivo corresponde a quantos segundos se passaram desde o início da simulação, a segunda coluna descreve a pluviometria em milímetros do intervalo de tempo entre a sua entrada e a anterior.
+Inicialmente, devemos disponibilizar ao InterSCSimulator a série temporal de volumes de chuva que servirá de base para a simulação. Isso é feito passando um arquivo de entrada no formato csv com essa descrição, chamado aqui de \texttt{rainfall.csv}. A primeira coluna desse arquivo corresponde a quantos segundos se passaram desde o início da simulação e a segunda coluna descreve a pluviometria em milímetros do intervalo de tempo entre a sua entrada e a anterior.
 
 A Listagem \ref{lst:exemplo-rain-csv} descreve a pluviometria horária em 5 horas de simulação. O arquivo \texttt{rainfall.csv} foi gerado a partir de um script em Python implementado especificamente para processar os dados brutos do INMET e convertê-los para o formato aceito pelo simulador.\footnote{Disponível em: \hl{[INSERIR LINK]}}
 
@@ -229,33 +227,33 @@ A meteorologista do INMET Marlene Real disse, em entrevista ao Portal Multiplix 
 
 A partir dessa especificação, desconsideraremos para a análise subsequente as ocorrências com menos de 5mm de chuva acumulados nas últimas 10 horas anteriores ao evento.
 
-Para definir o limite de pluviometria das vias da região da Sé, analisamos os índices pluviométricos nos horários próximos aos que foram apurados nas ocorrências de alagamentos. Aqui consideramos apenas os registros da CET a partir de 2023, pois são os únicos que dispõem de horário de início e término da interdição. O mapa de calor na Figura \ref{fig:heatmap-precipitacao-eventos} exibe o índice pluviométrico nas 6 horas anteriores e posteriores ao início da interdição por alagamentos.
+Para definir o limite de pluviometria das vias da região da Sé, analisamos os índices pluviométricos nos horários próximos aos que foram apurados nas ocorrências de alagamentos. Aqui consideramos apenas os registros da CET de 2023, pois são os únicos que dispõem de horário de início e término da interdição.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.6\textwidth]{imagens/heatmap-precipitacao-eventos.png}
-    \caption{Mapa de calor do índice pluviométrico nas 5 horas anteriores e posteriores ao início da interdição por alagamento na região da Sé}
-    \label{fig:heatmap-precipitacao-eventos}
+    \includegraphics[width=0.8\textwidth]{imagens/grafico_perfil_medio_chuva.png}
+    \caption{Média de chuva nas 5 horas anteriores e posteriores ao início da interdição por alagamento}
+    \label{fig:grafico-media-chuva-intervalo}
 \end{figure}
 
-A Tabela \ref{tab:porcentagem-chuva-relevante} traz a relação de momento em que a chuva forte começou em relação ao início do evento de alagamento. A partir dela, é razoável escolher para cada evento o volume de chuva acumulado no intervalo da 2\textsuperscript{a} hora anterior até o horário do evento como o índice de causa do alagamento, já que 67\% das ocorrências com chuva relevante se incluem nesse período.
+A Tabela \ref{tab:porcentagem-chuva-relevante} traz a relação do momento em que a chuva forte começou em relação ao início do evento de alagamento. A partir dela e do gráfico na Figura \ref{fig:grafico-media-chuva-intervalo}, é razoável escolher para cada evento o volume de chuva acumulado no intervalo da 2\textsuperscript{a} hora anterior até o horário do evento como o índice de causa do alagamento, já que 71,4\% das ocorrências com chuva relevante se incluem nesse período.
 
 \begin{table}[htbp]
     \begin{tabular}{|c|c|}
     \hline
     \textbf{Início da chuva forte} & \textbf{Quantidade de eventos} \\ \hline
-    Na hora do evento & 3   \\ \hline
-    1\textsuperscript{a} hora anterior & 22   \\ \hline
-    2\textsuperscript{a} hora anterior & 2   \\ \hline
-    3\textsuperscript{a} hora anterior & 0   \\ \hline
-    4\textsuperscript{a} hora anterior & 2   \\ \hline
-    5\textsuperscript{a} hora anterior & 2   \\ \hline
+    Na hora do evento & 5,7\%   \\ \hline
+    1\textsuperscript{a} hora anterior & 48,6\%   \\ \hline
+    2\textsuperscript{a} hora anterior & 17,1\%   \\ \hline
+    3\textsuperscript{a} hora anterior & 1,0\%   \\ \hline
+    4\textsuperscript{a} hora anterior & 1,9\%   \\ \hline
+    5\textsuperscript{a} hora anterior & 3,8\%   \\ \hline
     \end{tabular}
     \caption{Porcentagem de eventos com chuva relevante por intervalo de tempo}
     \label{tab:porcentagem-chuva-relevante}
 \end{table}
 
-Ao todo, \hl{xx\%} dos locais de alagamento da Sé estão inclusos nesse recorte. Para as vias em que houveram alagamentos mas não foram contempladas devido a não terem o registro horário, usaremos como limite de pluviometria o maior valor da soma deslizante de 3 horas no dia da ocorrência. Portanto, a capacidade pluviométrica de uma rua será o menor limite obtido dentre as ocorrências de alagamento observadas. 
+Para as vias em que houveram alagamentos mas não foram contempladas devido a não terem o registro horário, usaremos como limite de pluviometria o maior valor da soma deslizante de 3 horas no dia da ocorrência. Portanto, a capacidade pluviométrica de uma rua será o menor limite obtido dentre as ocorrências de alagamento observadas. 
 
 Finalmente, montamos o arquivo \texttt{roads-rainfall-capacity.csv} (Listagem \ref{lst:exemplo-roads-rain-capacity}), onde:
 
