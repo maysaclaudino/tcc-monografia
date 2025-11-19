@@ -20,13 +20,19 @@ Para atingir esse nível de desempenho, o simulador utiliza a linguagem de progr
 
 % O InterSCSimulator utiliza um modelo de simulação de tráfego mesoscópico, o que é um ponto de otimização crucial para lidar com cenários de larga escala. O modelo mesoscópico simula cada veículo individualmente, mas, diferentemente dos modelos microscópicos (que exigem alto custo computacional por detalhar a interação entre veículos e o comportamento de direção), ele simplifica o cálculo da velocidade. A velocidade de um veículo em uma via é determinada por uma função de densidade que relaciona a capacidade da rua e o número de veículos presentes. Essa abordagem é mais adequada para a simulação de grandes áreas urbanas, como regiões metropolitanas, pois permite modelar o fluxo da cidade de forma eficiente, sem o peso computacional de calcular a física detalhada de cada veículo individualmente.
 
-\section{Gerenciador de eventos}
+\section{A Gestão de Eventos de Trânsito}
 \label{sec:gerenciador-eventos}
 
 % **4.2 A Gestão de Eventos de Trânsito (Trabalhos Relacionados)**
 % * [cite_start]**O Conceito de Events Manager:** Detalhar a contribuição de Lucas Kanashiro [cite: 2953] que introduziu o agente `Events Manager` e a capacidade de alterar o grafo da cidade em tempo de execução.
 % * [cite_start]**Mecanismo de Interdição:** Explicar como o simulador processa arquivos estáticos (`events.xml`) para remover arestas (fechar ruas) ou reduzir capacidades em horários pré-agendados[cite: 3813, 3814].
 % * *Conexão:* Ressaltar que essa infraestrutura foi fundamental, mas que ela dependia de um agendamento manual e estático dos eventos.
+
+Para possibilitar a experimentação de cenários mais complexos, como acidentes de trânsito ou interdições programadas, foi necessário criar mecanismos que pudessem alterar a infraestrutura da cidade durante a simulação. Essa funcionalidade foi desenvolvida por Lucas Kanashiro Duarte em sua pesquisa de mestrado, através da implementação do agente Events Manager. Este agente é responsável por gerenciar eventos de trânsito, programando intervenções e modificando o grafo da cidade em tempo de execução. Essa característica é essencial para garantir o realismo da simulação, já que, no mundo real, a malha viária sofre alterações constantes devido a incidentes ou obras.
+
+O funcionamento dessa gestão de eventos baseia-se na leitura de um arquivo de configuração estático, chamado \verbatim{events.xml}, que lista as intervenções a serem realizadas. O simulador utiliza esse arquivo para agendar as modificações nos ciclos de tempo definidos. O sistema permite simular o fechamento total de vias, removendo temporariamente a aresta correspondente do grafo (close_street) e impedindo a passagem de veículos. Além disso, é possível simular a redução da capacidade de uma via (reduce_capacity), ajustando o fluxo permitido para uma porcentagem menor, o que reduz a velocidade dos carros naquele trecho.
+
+Apesar de o gerenciador de eventos ter criado a base necessária para alterar o mapa da cidade, ele dependia originalmente de um agendamento manual. Para simular um bloqueio, era preciso saber com antecedência e definir no arquivo \verbatim{events.xml} exatamente qual rua fecharia e quando. Essa abordagem funcionava bem para situações controladas, mas não permitia relacionar diretamente o acúmulo de chuva com a interdição das ruas. Este trabalho resolve essa limitação automatizando a criação desses eventos de bloqueio a partir do processamento de dados reais de chuva, como veremos a seguir.
 
 % **4.3 Modelagem e Ingestão de Dados Pluviométricos (Sua Contribuição)**
 % * **O Parser de Chuva (`RainfallParser`):** Descrever o módulo que você desenvolveu para ler os dados reais de precipitação (o arquivo `rain.csv` gerado no Cap. 3).
