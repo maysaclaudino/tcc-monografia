@@ -50,13 +50,12 @@ Um ponto importante resolvido nesta etapa foi o tratamento de eventos sobreposto
 
 Por fim, os eventos de alagamento gerados dinamicamente são unidos aos eventos estáticos do arquivo events.xml, formando uma lista única de intervenções na cidade. Quando um desses eventos é ativado durante a simulação, a aresta correspondente à via alagada é removida temporariamente do grafo. A consequência é que essa via deixa de ser considerada como um caminho possível. O agente (carro), ao se deparar com essa remoção ou ao planejar seu trajeto, é forçado a recalcular sua rota. O sistema então busca o menor caminho até o destino a partir da posição atual do veículo, utilizando apenas as ruas que não estão interditadas.
 
-
-% **4.4 Dinâmica de Alagamentos e Adaptação dos Agentes**
-% * **O Ciclo de Feedback Climático:**
-%     1.  Chuva acumulada supera a capacidade da via.
-%     2.  Disparo automático de um evento de fechamento (utilizando a infraestrutura do `Events Manager`).
-%     3.  A via torna-se intransitável no grafo.
-% * **Comportamento dos Agentes (Re-routing):** Descrever como os carros reagem ao encontrar uma via fechada por alagamento. [cite_start]Diferenciar do comportamento padrão (onde eles ficariam parados) para o comportamento adaptativo (recálculo de rota)[cite: 3348].
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{imagens/diagramas/fluxo-interdicao-vias.png}
+    \caption{Fluxo de interdição de ruas na simulação.}
+    \label{fig:fluxo-interdicao-vias}
+\end{figure}
 
 % **4.5 Configuração e Execução do Experimento**
 % * [cite_start]**Ambiente de Execução:** Mencionar brevemente a configuração técnica utilizada para rodar o experimento (Docker, Erlang VM)[cite: 3644].
@@ -66,5 +65,3 @@ Por fim, os eventos de alagamento gerados dinamicamente são unidos aos eventos 
 
 % 2.  **Imagens/Diagramas:**
 %     * [cite_start]Recomendo fortemente incluir um diagrama atualizado da arquitetura (similar à Figura 4.1 da tese do Eduardo [cite: 887]), mas adicionando as caixinhas dos seus novos módulos (`RainfallParser`, `FloodParser`) conectados ao `Events Manager`. Isso visualiza perfeitamente a sua contribuição.
-
-% Esse esqueleto cobre todo o percurso técnico e deixa claro qual é o "ombro de gigantes" em que você se apoiou e onde está a sua inovação. Pronta para começar o texto da seção 4.1?
