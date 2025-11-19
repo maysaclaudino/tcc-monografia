@@ -39,6 +39,14 @@ Apesar de o gerenciador de eventos ter criado a base necessária para alterar o 
 % * **O Parser de Alagamentos (`FloodParser`):** Explicar como o sistema lê o arquivo de capacidades das vias (`roads-rain-capacity.csv`), associando IDs de arestas a limites de chuva em mm.
 % * **Sincronização Temporal:** Explicar como o "relógio" da simulação consulta esses dados a cada passo de tempo (tick) para verificar o acúmulo de chuva.
 
+ele le o rain.csv e guarda em uma lista. 
+le o roads-rain-capacity.csv e guarda em outra lista. 
+processa os dois criando uma lista de eventos de alagamento. ele faz isso pegando a precipitacao acumulada de 3 horas, depois identifica quais ruas sao interditadas por essa quantidade, por fim monta o evento de close_street com duracao de 2 horas para os vértices daquela rua agrupando eles pelo momento da interdicao.como podemos ter eventos de alagamento que se sobrepoem (exemplo uma chuva forte constante que mantem a rua alagada por mais de duas horas [explicar melhor esse exemplo]) foi preciso alterar o events manager para lidar com eventos close_events quando uma rua ja esta fechada, adiando a sua abertura.
+adiciona os eventos de alagamentos aos eventos lidos de events.csv
+
+como para um fechamento completo de rua, a aresta correspondente é temporariamente removida do grafo da cidade, ao ser removida, essa via deixa de ser considerada como um caminho possível nas rotas calculadas pelos agentes, impedindo assim a passagem de qualquer carro pelo trecho interditado. quando isso acontece o carro recalcula a sua rota para o menor caminho até o seu destino a partir do vertice que ele esta usando as arestas disponiveis no grafo ou seja as ruas que nao estao interditadas.
+
+
 % **4.4 Dinâmica de Alagamentos e Adaptação dos Agentes**
 % * **O Ciclo de Feedback Climático:**
 %     1.  Chuva acumulada supera a capacidade da via.
