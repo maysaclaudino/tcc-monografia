@@ -34,17 +34,21 @@ O funcionamento dessa gestão de eventos baseia-se na leitura de um arquivo de c
 
 Apesar de o gerenciador de eventos ter criado a base necessária para alterar o mapa da cidade, ele dependia originalmente de um agendamento manual. Para simular um bloqueio, era preciso saber com antecedência e definir no arquivo \verbatim{events.xml} exatamente qual rua fecharia e quando. Essa abordagem funcionava bem para situações controladas, mas não permitia relacionar diretamente o acúmulo de chuva com a interdição das ruas. Este trabalho resolve essa limitação automatizando a criação desses eventos de bloqueio a partir do processamento de dados reais de chuva, como veremos a seguir.
 
+\section{A Modelagem de Eventos Pluviométricos}
+\label{sec:modelagem-eventos-pluviometricos}
+
 % **4.3 Modelagem e Ingestão de Dados Pluviométricos (Sua Contribuição)**
 % * **O Parser de Chuva (`RainfallParser`):** Descrever o módulo que você desenvolveu para ler os dados reais de precipitação (o arquivo `rain.csv` gerado no Cap. 3).
 % * **O Parser de Alagamentos (`FloodParser`):** Explicar como o sistema lê o arquivo de capacidades das vias (`roads-rain-capacity.csv`), associando IDs de arestas a limites de chuva em mm.
 % * **Sincronização Temporal:** Explicar como o "relógio" da simulação consulta esses dados a cada passo de tempo (tick) para verificar o acúmulo de chuva.
 
-ele le o rain.csv e guarda em uma lista. 
-le o roads-rain-capacity.csv e guarda em outra lista. 
-processa os dois criando uma lista de eventos de alagamento. ele faz isso pegando a precipitacao acumulada de 3 horas, depois identifica quais ruas sao interditadas por essa quantidade, por fim monta o evento de close_street com duracao de 2 horas para os vértices daquela rua agrupando eles pelo momento da interdicao.como podemos ter eventos de alagamento que se sobrepoem (exemplo uma chuva forte constante que mantem a rua alagada por mais de duas horas [explicar melhor esse exemplo]) foi preciso alterar o events manager para lidar com eventos close_events quando uma rua ja esta fechada, adiando a sua abertura.
-adiciona os eventos de alagamentos aos eventos lidos de events.csv
+Para resolver a dependência de agendamentos manuais, implementamos um mecanismo de pré-processamento que transforma dados climáticos brutos em eventos de trânsito para o simulador. O processo começa com a leitura dos dados: o sistema lê o arquivo rain.csv e guarda a série temporal de chuvas em uma lista na memória. Em seguida, lê o arquivo roads-rain-capacity.csv e armazena em outra lista os limites de chuva que cada via suporta antes de alagar.
 
-como para um fechamento completo de rua, a aresta correspondente é temporariamente removida do grafo da cidade, ao ser removida, essa via deixa de ser considerada como um caminho possível nas rotas calculadas pelos agentes, impedindo assim a passagem de qualquer carro pelo trecho interditado. quando isso acontece o carro recalcula a sua rota para o menor caminho até o seu destino a partir do vertice que ele esta usando as arestas disponiveis no grafo ou seja as ruas que nao estao interditadas.
+Com essas estruturas carregadas, o simulador cruza as informações para criar a lista de eventos de alagamento. A lógica utiliza uma janela de tempo deslizante: o sistema calcula a chuva acumulada nas últimas 3 horas para cada momento registrado no arquivo de chuvas. Se esse volume acumulado for maior que a capacidade suportada pela via, é criado automaticamente um evento de fechamento (close_street) para os trechos daquela rua, com uma duração padrão de 2 horas.
+
+Um ponto importante resolvido nesta etapa foi o tratamento de eventos sobrepostos. Existem situações em que uma chuva forte e constante pode manter uma rua alagada por um período maior que a duração padrão. Para lidar com isso, o agente Events Manager foi alterado. Em vez de tentar fechar uma rua que já está fechada, o gerenciador verifica o estado da via: se um novo alagamento é detectado para um trecho já bloqueado, o sistema adia o horário de sua reabertura. Dessa forma, o bloqueio continua ativo enquanto as condições de chuva permanecerem críticas.
+
+Por fim, os eventos de alagamento gerados dinamicamente são unidos aos eventos estáticos do arquivo events.xml, formando uma lista única de intervenções na cidade. Quando um desses eventos é ativado durante a simulação, a aresta correspondente à via alagada é removida temporariamente do grafo. A consequência é que essa via deixa de ser considerada como um caminho possível. O agente (carro), ao se deparar com essa remoção ou ao planejar seu trajeto, é forçado a recalcular sua rota. O sistema então busca o menor caminho até o destino a partir da posição atual do veículo, utilizando apenas as ruas que não estão interditadas.
 
 
 % **4.4 Dinâmica de Alagamentos e Adaptação dos Agentes**
