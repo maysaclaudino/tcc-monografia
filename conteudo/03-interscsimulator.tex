@@ -5,7 +5,38 @@
 \chapter{O InterSCSimulator}
 \label{chap:interscsimulator}
 
-To-do
+% **4.1 Visão Geral da Ferramenta**
+% * [cite_start]**Origem e Propósito:** Apresentar o *InterSCSimulator*, desenvolvido por Santana[cite: 34], como um simulador de cidades inteligentes, open-source e de larga escala.
+% * [cite_start]**Arquitetura Técnica:** Explicar brevemente a escolha da linguagem **Erlang** e o **Modelo de Atores** (Actor Model)[cite: 101]. [cite_start]Destacar por que isso é vital para simular milhões de agentes (carros, pedestres, etc.) simultaneamente em "super real-time"[cite: 104].
+% * [cite_start]**Modelo de Tráfego:** Descrever o modelo mesoscópico utilizado (filas e densidade de vias)[cite: 848], que permite simular o fluxo da cidade sem o peso computacional de calcular a física de cada veículo individualmente.
 
 \section{Gerenciador de eventos}
 \label{sec:gerenciador-eventos}
+
+% **4.2 A Gestão de Eventos de Trânsito (Trabalhos Relacionados)**
+% * [cite_start]**O Conceito de Events Manager:** Detalhar a contribuição de Lucas Kanashiro [cite: 2953] que introduziu o agente `Events Manager` e a capacidade de alterar o grafo da cidade em tempo de execução.
+% * [cite_start]**Mecanismo de Interdição:** Explicar como o simulador processa arquivos estáticos (`events.xml`) para remover arestas (fechar ruas) ou reduzir capacidades em horários pré-agendados[cite: 3813, 3814].
+% * *Conexão:* Ressaltar que essa infraestrutura foi fundamental, mas que ela dependia de um agendamento manual e estático dos eventos.
+
+% **4.3 Modelagem e Ingestão de Dados Pluviométricos (Sua Contribuição)**
+% * **O Parser de Chuva (`RainfallParser`):** Descrever o módulo que você desenvolveu para ler os dados reais de precipitação (o arquivo `rain.csv` gerado no Cap. 3).
+% * **O Parser de Alagamentos (`FloodParser`):** Explicar como o sistema lê o arquivo de capacidades das vias (`roads-rain-capacity.csv`), associando IDs de arestas a limites de chuva em mm.
+% * **Sincronização Temporal:** Explicar como o "relógio" da simulação consulta esses dados a cada passo de tempo (tick) para verificar o acúmulo de chuva.
+
+% **4.4 Dinâmica de Alagamentos e Adaptação dos Agentes**
+% * **O Ciclo de Feedback Climático:**
+%     1.  Chuva acumulada supera a capacidade da via.
+%     2.  Disparo automático de um evento de fechamento (utilizando a infraestrutura do `Events Manager`).
+%     3.  A via torna-se intransitável no grafo.
+% * **Comportamento dos Agentes (Re-routing):** Descrever como os carros reagem ao encontrar uma via fechada por alagamento. [cite_start]Diferenciar do comportamento padrão (onde eles ficariam parados) para o comportamento adaptativo (recálculo de rota)[cite: 3348].
+
+% **4.5 Configuração e Execução do Experimento**
+% * [cite_start]**Ambiente de Execução:** Mencionar brevemente a configuração técnica utilizada para rodar o experimento (Docker, Erlang VM)[cite: 3644].
+% * **Saídas e Métricas:** Descrever quais dados o simulador gera (arquivos de log, `output.xml`) que permitirão a análise dos impactos (tempo de viagem, etc.) no próximo capítulo.
+
+% ---
+
+% 2.  **Imagens/Diagramas:**
+%     * [cite_start]Recomendo fortemente incluir um diagrama atualizado da arquitetura (similar à Figura 4.1 da tese do Eduardo [cite: 887]), mas adicionando as caixinhas dos seus novos módulos (`RainfallParser`, `FloodParser`) conectados ao `Events Manager`. Isso visualiza perfeitamente a sua contribuição.
+
+% Esse esqueleto cobre todo o percurso técnico e deixa claro qual é o "ombro de gigantes" em que você se apoiou e onde está a sua inovação. Pronta para começar o texto da seção 4.1?
