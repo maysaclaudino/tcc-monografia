@@ -2,13 +2,23 @@
 %("dica" para o editor de texto: este arquivo é parte de um documento maior)
 % para saber mais: https://tex.stackexchange.com/q/78101
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \chapter{O InterSCSimulator}
 \label{chap:interscsimulator}
 
 % **4.1 Visão Geral da Ferramenta**
 % * [cite_start]**Origem e Propósito:** Apresentar o *InterSCSimulator*, desenvolvido por Santana[cite: 34], como um simulador de cidades inteligentes, open-source e de larga escala.
+
 % * [cite_start]**Arquitetura Técnica:** Explicar brevemente a escolha da linguagem **Erlang** e o **Modelo de Atores** (Actor Model)[cite: 101]. [cite_start]Destacar por que isso é vital para simular milhões de agentes (carros, pedestres, etc.) simultaneamente em "super real-time"[cite: 104].
+
+O InterSCSimulator é um simulador de código aberto voltado para Cidades Inteligentes, projetado especificamente para lidar com cenários de grande escala. A ferramenta foi desenvolvida para representar a complexidade de um ambiente urbano real, incluindo o tráfego de veículos, o deslocamento de pedestres, o sistema de transporte público (como ônibus e metrô) e redes de sensores. O principal objetivo do simulador é permitir a execução de cenários realistas que possam auxiliar tanto pesquisadores quanto gestores públicos na tomada de decisões. Uma de suas características mais importantes é a capacidade de gerenciar milhões de agentes simultaneamente, o que possibilita a representação detalhada da mobilidade em grandes metrópoles.
+
+Para atingir esse nível de desempenho, o simulador utiliza a linguagem de programação Erlang e baseia-se no Modelo de Atores. Nessa abordagem, cada elemento da simulação, um carro, um pedestre ou um sensor, atua como uma unidade independente (um ator) que se comunica com os outros por meio de trocas de mensagens. Essa arquitetura é essencial para garantir que o sistema consiga processar o enorme volume de interações que ocorrem no trânsito de uma cidade como São Paulo. Graças a essa estrutura, o InterSCSimulator consegue executar cenários com mais de 20 milhões de agentes de forma eficiente, muitas vezes em velocidade superior ao tempo real.
+
 % * [cite_start]**Modelo de Tráfego:** Descrever o modelo mesoscópico utilizado (filas e densidade de vias)[cite: 848], que permite simular o fluxo da cidade sem o peso computacional de calcular a física de cada veículo individualmente.
+
+% O InterSCSimulator utiliza um modelo de simulação de tráfego mesoscópico, o que é um ponto de otimização crucial para lidar com cenários de larga escala. O modelo mesoscópico simula cada veículo individualmente, mas, diferentemente dos modelos microscópicos (que exigem alto custo computacional por detalhar a interação entre veículos e o comportamento de direção), ele simplifica o cálculo da velocidade. A velocidade de um veículo em uma via é determinada por uma função de densidade que relaciona a capacidade da rua e o número de veículos presentes. Essa abordagem é mais adequada para a simulação de grandes áreas urbanas, como regiões metropolitanas, pois permite modelar o fluxo da cidade de forma eficiente, sem o peso computacional de calcular a física detalhada de cada veículo individualmente.
 
 \section{Gerenciador de eventos}
 \label{sec:gerenciador-eventos}
