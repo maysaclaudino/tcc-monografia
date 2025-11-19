@@ -30,9 +30,9 @@ Para atingir esse nível de desempenho, o simulador utiliza a linguagem de progr
 
 Para possibilitar a experimentação de cenários mais complexos, como acidentes de trânsito ou interdições programadas, foi necessário criar mecanismos que pudessem alterar a infraestrutura da cidade durante a simulação. Essa funcionalidade foi desenvolvida por Lucas Kanashiro Duarte em sua pesquisa de mestrado, através da implementação do agente Events Manager. Este agente é responsável por gerenciar eventos de trânsito, programando intervenções e modificando o grafo da cidade em tempo de execução. Essa característica é essencial para garantir o realismo da simulação, já que, no mundo real, a malha viária sofre alterações constantes devido a incidentes ou obras.
 
-O funcionamento dessa gestão de eventos baseia-se na leitura de um arquivo de configuração estático, chamado \verbatim{events.xml}, que lista as intervenções a serem realizadas. O simulador utiliza esse arquivo para agendar as modificações nos ciclos de tempo definidos. O sistema permite simular o fechamento total de vias, removendo temporariamente a aresta correspondente do grafo (close_street) e impedindo a passagem de veículos. Além disso, é possível simular a redução da capacidade de uma via (reduce_capacity), ajustando o fluxo permitido para uma porcentagem menor, o que reduz a velocidade dos carros naquele trecho.
+O funcionamento dessa gestão de eventos baseia-se na leitura de um arquivo de configuração estático, chamado events.xml, que lista as intervenções a serem realizadas. O simulador utiliza esse arquivo para agendar as modificações nos ciclos de tempo definidos. O sistema permite simular o fechamento total de vias, removendo temporariamente a aresta correspondente do grafo (close\_street) e impedindo a passagem de veículos. Além disso, é possível simular a redução da capacidade de uma via (reduce\_capacity), ajustando o fluxo permitido para uma porcentagem menor, o que reduz a velocidade dos carros naquele trecho.
 
-Apesar de o gerenciador de eventos ter criado a base necessária para alterar o mapa da cidade, ele dependia originalmente de um agendamento manual. Para simular um bloqueio, era preciso saber com antecedência e definir no arquivo \verbatim{events.xml} exatamente qual rua fecharia e quando. Essa abordagem funcionava bem para situações controladas, mas não permitia relacionar diretamente o acúmulo de chuva com a interdição das ruas. Este trabalho resolve essa limitação automatizando a criação desses eventos de bloqueio a partir do processamento de dados reais de chuva, como veremos a seguir.
+Apesar de o gerenciador de eventos ter criado a base necessária para alterar o mapa da cidade, ele dependia originalmente de um agendamento manual. Para simular um bloqueio, era preciso saber com antecedência e definir no arquivo events.xml exatamente qual rua fecharia e quando. Essa abordagem funcionava bem para situações controladas, mas não permitia relacionar diretamente o acúmulo de chuva com a interdição das ruas. Este trabalho resolve essa limitação automatizando a criação desses eventos de bloqueio a partir do processamento de dados reais de chuva, como veremos a seguir.
 
 \section{A Modelagem de Eventos Pluviométricos}
 \label{sec:modelagem-eventos-pluviometricos}
@@ -44,7 +44,7 @@ Apesar de o gerenciador de eventos ter criado a base necessária para alterar o 
 
 Para resolver a dependência de agendamentos manuais, implementamos um mecanismo de pré-processamento que transforma dados climáticos brutos em eventos de trânsito para o simulador. O processo começa com a leitura dos dados: o sistema lê o arquivo rain.csv e guarda a série temporal de chuvas em uma lista na memória. Em seguida, lê o arquivo roads-rain-capacity.csv e armazena em outra lista os limites de chuva que cada via suporta antes de alagar.
 
-Com essas estruturas carregadas, o simulador cruza as informações para criar a lista de eventos de alagamento. A lógica utiliza uma janela de tempo deslizante: o sistema calcula a chuva acumulada nas últimas 3 horas para cada momento registrado no arquivo de chuvas. Se esse volume acumulado for maior que a capacidade suportada pela via, é criado automaticamente um evento de fechamento (close_street) para os trechos daquela rua, com uma duração padrão de 2 horas.
+Com essas estruturas carregadas, o simulador cruza as informações para criar a lista de eventos de alagamento. A lógica utiliza uma janela de tempo deslizante: o sistema calcula a chuva acumulada nas últimas 3 horas para cada momento registrado no arquivo de chuvas. Se esse volume acumulado for maior que a capacidade suportada pela via, é criado automaticamente um evento de fechamento (close\_street) para os trechos daquela rua, com uma duração padrão de 2 horas.
 
 Um ponto importante resolvido nesta etapa foi o tratamento de eventos sobrepostos. Existem situações em que uma chuva forte e constante pode manter uma rua alagada por um período maior que a duração padrão. Para lidar com isso, o agente Events Manager foi alterado. Em vez de tentar fechar uma rua que já está fechada, o gerenciador verifica o estado da via: se um novo alagamento é detectado para um trecho já bloqueado, o sistema adia o horário de sua reabertura. Dessa forma, o bloqueio continua ativo enquanto as condições de chuva permanecerem críticas.
 
@@ -52,7 +52,7 @@ Por fim, os eventos de alagamento gerados dinamicamente são unidos aos eventos 
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{imagens/diagramas/fluxo-interdicao-vias.png}
+    \includegraphics[width=\linewidth]{imagens/diagramas/fluxo-interdicao-vias.png}
     \caption{Fluxo de interdição de ruas na simulação.}
     \label{fig:fluxo-interdicao-vias}
 \end{figure}
